@@ -6,10 +6,10 @@ pipeline {
    }
 
    stages {
-      stege("Build"){
-	 steps {
-	    sh "mv -version"
-	    sh "mvn clean install"
+      stage("Build") {
+         steps {
+            sh "mv -version"
+            sh "mvn clean install"
 	 }
       }
 
