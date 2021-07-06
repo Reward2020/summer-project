@@ -1,6 +1,7 @@
 pipeline {
-    agent { doker 'maven:3.5-alpine' }
-    stages ('Checout') {
+    agent { doker 'maven:3.6-alpine' }
+    stages {
+       stage ('Checout') {
         steps {
            git 'https://github.com/Reward2020/summer-project.git'
       } 
@@ -11,5 +12,6 @@ pipeline {
              junit '**/target/surefire-reports/TEST-*.xml'
              archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
        }
+     }
    }
 }
