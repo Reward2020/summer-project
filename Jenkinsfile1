@@ -1,0 +1,15 @@
+pipeline {
+    agent { doker 'maven:3.5-alpine' }
+    stages ('Checout') {
+        steps {
+           git 'https://github.com/Reward2020/summer-project.git'
+      } 
+     }
+     stage('Build') {
+         steps {
+             sh 'mvn clean package'
+             junit '**/target/surefire-reports/TEST-*.xml'
+             archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+       }
+   }
+}
