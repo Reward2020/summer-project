@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'linux' }
+    agent any
     stages {
         stage ('Checkout') {
           steps {
@@ -17,8 +17,8 @@ pipeline {
         stage('Deploy') {
           steps {
             input 'Do you approve the deployment?'
-            sh 'scp target/*.jar jenkins@34.221.19.255:/opt/pet/'
-            sh "ssh jenkins@34.221.19.255 'nohup java -jar /opt/pet/spring-petclinic-1.5.1.jar &'"
+            sh 'scp target/*.jar jenkins1@34.221.19.255:/opt/pet/'
+            sh "ssh jenkins1@34.221.19.255 'nohup java -jar /opt/pet/spring-petclinic-1.5.1.jar &'"
           }
         }
     }
