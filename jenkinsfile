@@ -10,7 +10,11 @@ pipeline {
           }
         }
         stage ('Build') {
-            agent { docker 'maven:3.8.1-jdk-8' }
+            agent { 
+			   docker 'maven:3.8.1-jdk-8'          
+			   label "docker"
+               args "-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2"
+			}
             steps {
                 sh 'mvn clean package'
                 junit '**/target/surefire-reports/TEST-*.xml'
