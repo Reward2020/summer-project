@@ -3,9 +3,11 @@ pipeline {
     JAVA_TOOL_OPTIONS = "-Duser.home=/home/jenkins"
    }
     agent { 
-	  docker 'maven:3.8.1-jdk-8'          
-	  label "docker"
-      args "-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2"
+	  docker {
+	     docker 'maven:3.8.1-jdk-8'          
+	     label "docker"
+         args "-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2"
+	  }	 
 	}
     stages {
         stage ('Checkout') {
