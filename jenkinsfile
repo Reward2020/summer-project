@@ -13,7 +13,7 @@ pipeline {
         stage ('Build') {
             steps {
 			    sh 'mvn compiler:compile'
-                sh './mvnw package'
+                sh './mvnw spring-boot:run'
                 junit '**/target/surefire-reports/TEST-*.xml'
                 archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             }
