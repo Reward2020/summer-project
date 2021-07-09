@@ -11,8 +11,8 @@ pipeline {
         stage ("Build") {
             steps {
 			    sh "mvn -version"
-                // sh "env && ./mvnw package"
-				sh "mvn -Dmaven.test.failure=tru clean package"
+                sh "env && ./mvnw clean package"
+				// sh "mvn -Dmaven.test.failure=tru clean package"
             }
         }
     }
