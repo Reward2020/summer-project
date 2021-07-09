@@ -4,10 +4,14 @@ pipeline {
         stage ('Build') {
             steps {
                 sh './mvnw package'
-                junit '**/target/surefire-reports/TEST-*.xml'
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             }
         }
+		stage ('Artifact'){
+		    steps{
+                junit '**/target/surefire-reports/TEST-*.xml'
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            }	
+     	}
         stage('Deploy') {
           steps {
             input 'Do you approve the deployment?'
