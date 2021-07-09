@@ -1,12 +1,17 @@
 pipeline {
-    agent any
+    agent {
+	  docker{
+	  image "maven:3.8.1-jdk-8"
+	  label "docker"
+	  }
+	
+	}
     stages {
-        stage ('Build') {
+        stage ("Build") {
             steps {
-			    sh 'mvn clean install'
-                sh './mvnw package'
+			    sh "mvn -version"
+                sh "./mvnw package"
             }
         }
     }
 }
-◘
