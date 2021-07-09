@@ -1,4 +1,8 @@
 pipeline {
+	tools{
+	jdk "java-8"
+	maven "maven-3"
+	}
     agent {
 	  docker{
 	  image "maven:3.8.1-jdk-8"
@@ -11,7 +15,8 @@ pipeline {
         stage ("Build") {
             steps {
 			    sh "mvn -version"
-                sh "env && ./mvnw package"
+                // sh "env && ./mvnw package"
+				sh "mvn -Dmaven.test.failure=tru clean package"
             }
         }
     }
