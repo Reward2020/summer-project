@@ -1,4 +1,4 @@
-FROM openjdk:17-oraclelinux7
+FROM maven-jdk-8
 RUN mkdir ~/myapp
 WORKDIR ~/myapp
 COPY ./target/*.jar ./spring-petclinic.jar
