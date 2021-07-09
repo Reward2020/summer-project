@@ -1,73 +1,22 @@
 pipeline {
+   environment {
+    JAVA_TOOL_OPTIONS = "-Duser.home=/var/maven"
+   }
     agent any
-    environment {
-        DOCKER_IMAGE_NAME = "anatoliihrychaniuk/spring-petclinic-image"
-    }
-
-    parameters{
-        string(name: 'REGISTRY', defaultValue: 'registry.hub.docker.com', description: 'Choose the Registry')
-        choice(name: 'CREDS_ID', choices: ['dockerhub_creds', 'gitlab_creds'], description: "Choose the credential ID for 'REGISTRY'")
-        booleanParam(name: 'BUILD_APP', defaultValue: false, description: "Should we run the 'Build App' stage?")
-    }
-
     stages {
-        
-        stage('Show Parameters') {
+        stage ('Build') {
             steps {
-                script {
-                    def groovy
-                    groovy = load ('groovy.script')
-                    groovy.showParams()
-                }
+                sh './mvnw package -Dmaven.test.skip=true'
+                junit '**/target/surefire-reports/TEST-*.xml'
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
             }
         }
-        
-        stage('Build App') {
-            when {
-                branch 'main'
-                expression {
-                    params.BUILD_APP == true
-                }
-            }            
-            steps {
-                echo 'Running build automation'
-                sh './mvnw package'
-            }
-        }
-    
-        stage('Build Docker Image') {
-            when {
-                branch 'main'
-            }
-            steps {
-                script {
-                    app = docker.build("${params.REGISTRY}/${DOCKER_IMAGE_NAME}")       
-                }
-            }
-        }
-        
-        stage('Push Docker Image') {
-            when {
-                branch 'main'
-            }
-            steps {
-                script {
-                    docker.withRegistry("https://${params.REGISTRY}", "${params.CREDS_ID}") {
-                        app.push("${BUILD_NUMBER}")
-                        app.push("latest")
-                    }
-                }
-            }
-        }
-        
-        
-    }
-    
-    post {
-        cleanup {
-            sh "docker rmi ${params.REGISTRY}/${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}"
-            sh "docker rmi ${params.REGISTRY}/${DOCKER_IMAGE_NAME}:latest"
+        stage('Deploy') {
+          steps {
+            input 'Do you approve the deployment?'
+            sh 'scp target/*.jar jenkins1@34.221.19.255:/opt/pet/'
+            sh "ssh jenkins1@34.221.19.255 'nohup java -jar /opt/pet/spring-petclinic-1.5.1.jar &'"
+          }
         }
     }
-    
 }
