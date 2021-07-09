@@ -13,8 +13,8 @@ pipeline {
       stage("Build") {
          steps {
 
-            sh "./mvnw package"
-
+            // sh "./mvnw package"
+            sh "mvn -Dmaven.test.failure=tru clean package"
 	     }
       }
 
@@ -29,9 +29,14 @@ pipeline {
    }
 
    post {
-     always {
+      success{
+             junit '**/target/surefire-reports/TEST-*.xml'
+             archiveArtifacts artifacts: 'target/*.jar', fingerprint: true	  
+	  }
+      always {
         cleanWs()
      }
+	  
    }
 
 }
