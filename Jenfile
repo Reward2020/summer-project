@@ -12,12 +12,16 @@ pipeline {
    stages {
       stage("Build") {
          steps {
-            sh "ssh -V"
-            sh "mvn -version"
+
             sh "./mvnw package"
-			junit '**/target/surefire-reports/TEST-*.xml'
-            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+
 	     }
+      }
+	  stage ('Artifact'){
+		    steps{
+                junit '**/target/surefire-reports/TEST-*.xml'
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            }	
       }
 	  stage('Deploy') {
           steps {
