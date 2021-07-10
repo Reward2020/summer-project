@@ -9,7 +9,7 @@ pipeline {
         stage ("Build") {
             steps {
 			    sh "mvn -version"
-				sh 'cd /var/lib/jenkins/workspace/Pipeline'
+				sh 'cd ~/project'
 				sh './mvnw spring-boot-maven-plugin:run'
 				junit '**/target/surefire-reports/TEST-*.xml'
 			}	
