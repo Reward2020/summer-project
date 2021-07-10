@@ -3,7 +3,7 @@ pipeline {
 	  docker{
 	  image "maven:3.6.0-jdk-8"
 	  label "docker"
-	 // args "-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2"
+	  args "-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2"
 	  }
 	
 	}
@@ -11,7 +11,8 @@ pipeline {
         stage ("Build") {
             steps {
 			    sh "mvn -version"
-                sh "env && ./mvnw package" //-Dmaven.test.skip=true -Pqa -Duser.timezone=UTC"
+				sh "./mvnw spring-boot:run"
+                //sh "env && ./mvnw package" //-Dmaven.test.skip=true -Pqa -Duser.timezone=UTC"
 				// sh "mvn -Dmaven.test.failure=tru clean package"
             }
         }
