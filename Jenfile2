@@ -4,7 +4,7 @@ pipeline {
         stage ("Build") {
             steps {
 			    sh "mvn -version"
-				build ' mvn clean package'
+				build './mvnw package'
 				junit '**/target/surefire-reports/TEST-*.xml'
 			}	
         }
