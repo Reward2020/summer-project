@@ -3,7 +3,7 @@ pipeline {
 	  docker{
 	  image "maven:3.6.0-jdk-8"
 	  label "docker"
-	  args "-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2"
+	  args "-v /tmp/maven:/home/jenkins/.m2 -e -d MAVEN_CONFIG=/home/jenkins/.m2"
 	  }
 	
 	}
