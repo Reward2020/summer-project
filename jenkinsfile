@@ -11,8 +11,8 @@ pipeline {
         stage ("Build") {
             steps {
 			    sh "mvn -version"
-				sh ./mvnw spring-boot-maven-plugin:run"
-                // sh "env && ./mvnw package" //-Dmaven.test.skip=true -Pqa -Duser.timezone=UTC"
+				sh "./mvnw spring-boot-maven-plugin:run"
+                / sh "env && ./mvnw package" //-Dmaven.test.skip=true -Pqa -Duser.timezone=UTC"
 				// sh "mvn -Dmaven.test.failure=tru clean package"
             }
         }
