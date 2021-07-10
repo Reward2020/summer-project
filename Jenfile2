@@ -9,8 +9,7 @@ pipeline {
         stage ("Build") {
             steps {
 			    sh "mvn -version"
-				sh 'cd ~/project'
-				sh './mvnw spring-boot-maven-plugin:run'
+				sh './mvnw package'
 				junit '**/target/surefire-reports/TEST-*.xml'
 			}	
         }
