@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         DOCKER_IMAGE_NAME = "anatoliihruchaniuk/pet-clinic-image"
+		registryCredential = "dockerhub"
     }
     stages {
         stage('Build') {
