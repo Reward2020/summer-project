@@ -39,6 +39,9 @@ pipeline {
             }
         }
         stage('Deploy To Stage-Server') {
+            when {
+                branch 'main'
+            }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'stage_server_creds', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     script {
