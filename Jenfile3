@@ -34,7 +34,7 @@ pipeline {
         }
         stage('Deploy To Stage-Server') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'stage_server_creds', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'id_cred_prod', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     script {
                         sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$STAGE_SERVER_IP \"docker pull $DOCKER_IMAGE_NAME:${env.BUILD_NUMBER}\""
                         sh ''
