@@ -36,10 +36,10 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'id_cred_prod', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     script {
-					    sh "sshpass -p '$USERPASS' ssh -o StrictHostKeyChecking=no $USERNAME@$STAGE_SERVER_IP \"docker pull $DOCKER_IMAGE_NAME:${env.BUILD_NUMBER}\""
+					    sh "sshpass -p Profit00 ssh -o StrictHostKeyChecking=no jenkins1@34.221.19.255 \"docker pull $DOCKER_IMAGE_NAME:${env.BUILD_NUMBER}\""
                         sh ''
                         try {
-                            sh "sshpass -p '$USERPASS' ssh -o StrictHostKeyChecking=no $USERNAME@$STAGE_SERVER_IP \"docker stop spring-petclinic\""
+                            sh "sshpass -p '$USERPASS' ssh -o StrictHostKeyChecking=no $USERNAME@34.221.19.255 \"docker stop spring-petclinic\""
                         } catch (err) {
                             echo: 'caught error: $err'
                         }
