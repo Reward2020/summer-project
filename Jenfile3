@@ -38,7 +38,7 @@ pipeline {
                     
 					  //  sh ("sshpass -p 'USERPASS' ssh -o StrictHostKeyChecking=no $USERNAME@34.221.19.255 \"docker pull $DOCKER_IMAGE_NAME:${env.BUILD_NUMBER}\"")
                        // sh ''						
-                        sh ("sshpass -p 'USERPASS' ssh -o StrictHostKeyChecking=no $USERNAME@34.221.19.255 \"docker run -d --rm --name spring-petclinic -p 8080:8080 $DOCKER_IMAGE_NAME:${env.BUILD_NUMBER}\"")
+                        sh ("sshpass -p 'Profit00' ssh -o StrictHostKeyChecking=no $USERNAME@34.221.19.255 \"docker run -d --rm --name spring-petclinic -p 8080:8080 $DOCKER_IMAGE_NAME:${env.BUILD_NUMBER}\"")
                     
                 }
             }
