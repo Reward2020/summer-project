@@ -37,7 +37,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'id_cred_prod', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     script {
 
-                        sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@34.221.19.255 \"docker run -d --rm --name spring-petclinic -p 8080:8080 $DOCKER_IMAGE_NAME:${env.BUILD_NUMBER}\""
+                        sh "sshpass -p '$USERPASS' ssh -o StrictHostKeyChecking=no $USERNAME@34.221.19.255 \"docker run -d --rm --name spring-petclinic -p 8080:8080 $DOCKER_IMAGE_NAME:${env.BUILD_NUMBER}\""
                     }
                 }
             }
