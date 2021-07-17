@@ -37,7 +37,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'id_cred_prod', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
 		script {
                     try {
-                            sh "sshpass -p 'Profit00' ssh -o StrictHostKeyChecking=no $USERNAME@$STAGE_SERVER_IP \"docker stop spring-petclinic\""
+                            sh "sshpass -p 'Profit00' ssh -o StrictHostKeyChecking=no $USERNAME@34.221.19.255 \"docker stop spring-petclinic\""
 
                         } catch (err) {
                             echo: 'caught error: $err'
