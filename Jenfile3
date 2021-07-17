@@ -44,7 +44,7 @@ pipeline {
                         }
                        sh ''						
                         sh ("sshpass -p 'Profit00' ssh -o StrictHostKeyChecking=no $USERNAME@34.221.19.255 \"docker run -d --rm --name spring-petclinic -p 8080:8080 $DOCKER_IMAGE_NAME:${env.BUILD_NUMBER}\"")
-                    
+                    }
                 }
             }
         }
