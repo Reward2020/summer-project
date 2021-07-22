@@ -37,13 +37,13 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'id_cred_prod', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
 		script {
                     try {
-                            sh "sshpass -p 'PASSWORD' ssh -o StrictHostKeyChecking=no $USERNAME@34.221.19.255 \"docker stop spring-petclinic\""
+                            sh "sshpass -p '$PASSWORD' ssh -o StrictHostKeyChecking=no $USERNAME@34.221.19.255 \"docker stop spring-petclinic\""
 
                         } catch (err) {
                             echo: 'caught error: $err'
                         }
                        sh ''						
-                        sh ("sshpass -p 'PASSWORD' ssh -o StrictHostKeyChecking=no $USERNAME@34.221.19.255 \"docker run -d --rm --name spring-petclinic -p 8080:8080 $DOCKER_IMAGE_NAME:${env.BUILD_NUMBER}\"")
+                        sh ("sshpass -p '$PASSWORD' ssh -o StrictHostKeyChecking=no $USERNAME@34.221.19.255 \"docker run -d --rm --name spring-petclinic -p 8080:8080 $DOCKER_IMAGE_NAME:${env.BUILD_NUMBER}\"")
                     }
                 }
             }
