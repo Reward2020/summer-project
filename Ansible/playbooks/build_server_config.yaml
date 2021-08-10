@@ -1,0 +1,139 @@
+---
+- name: Install all programs
+  hosts: all
+  become: yes
+
+  tasks:
+  #- include: ../vars/main.yaml
+
+  - name: Update apt packeage
+    become: true
+    apt:
+      update_cache: yes
+  
+  - name: Install Java OpenJDK 8  
+    become: yes
+    apt:
+      name: openjdk-8-jdk
+      state: present
+  
+  - name: Install Maven
+    become: yes
+    apt: pkg={{ item }} state=latest update_cache=yes cache_valid_time=3600
+    with_items:
+    - maven
+
+  - name: Install required packages
+    apt:
+      name: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
+      state: latest
+      update_cache: yes
+
+
+
+  - name: Add Docker GPG apt key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+  - name: Add Docker Repository
+    apt_repository:
+      repo: deb https://download.docker.com/linux/ubuntu xenial stable
+      state: present
+
+  - name: Update apt and install docker-ce
+    apt: update_cache=yes name=docker-ce state=latest
+
+  - name: Install Docker Module for Python
+    pip:
+      name: docker
+
+
+  
+
+  - name: Ensure the jenkins apt repository key is installed
+    apt_key: url=https://pkg.jenkins.io/debian-stable/jenkins.io.key state=present
+    become: yes
+
+  - name: Ensure the repository is configured
+    apt_repository: repo='deb https://pkg.jenkins.io/debian-stable binary/' state=present
+    become: yes
+
+  - name: Ensure jenkins is installed
+    apt: name=jenkins update_cache=yes
+    become: yes
+
+  - name: Ensure jenkins is running
+    service: name=jenkins state=restarted
+
+
+
+
+  - name: Adding existing users to group
+    user:
+      name: '{{ item }}'
+      groups: docker
+      append: yes
+    with_items:
+      - jenkins
+#      - '{{ USER }}'
+
+
+
+
+  - name: Configure ufw rules
+    ufw: rule={{ item.rule }} port={{ item.port }} proto={{ item.protocol }}
+    with_items:
+      - { rule: 'allow', port: '8080', protocol: 'tcp' }
+      - { rule: 'allow', port: '80', protocol: 'tcp' }
+      - { rule: 'allow', port: '22', protocol: 'tcp' }
+
+  - name: Allow OpenSSH
+    ufw: rule=allow name=OpenSSH
+
+  - name: Enable ufw logging
+    ufw: logging=on
+
+  - name: Enable ufw
+    ufw: state=enabled policy=allow
+
+
+
+
+  - name: Restart Docker
+    service: name=docker state=restarted
+  
+  
+  
+
+  - name: Install software-properties-common
+    apt: pkg=software-properties-common state=latest
+
+  - name: Add ansible stable repository from PPA and install its signing key on Ubuntu target
+    apt_repository:
+      repo: ppa:ansible/ansible
+  
+  - name: Install Ansible
+    apt: pkg=ansible state=latest
+  
+  - name: Install Sshpass
+    apt: pkg=sshpass state=latest
+
+  - name: Set up Ansible host key checking 
+    lineinfile:
+      dest: /etc/ansible/ansible.cfg
+      regexp: '#host_key_checking = False'
+      line: 'host_key_checking = False'
+  
+  - name: Set up Ansible interpreter
+    lineinfile:
+      dest: /etc/ansible/ansible.cfg
+      regexp: '# some basic default values...'
+      line: 'interpreter_python = /usr/bin/python3'
+
+
+
+
+  - name: Reboot
+    reboot:
+      reboot_timeout: 3600

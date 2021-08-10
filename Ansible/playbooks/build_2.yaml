@@ -1,0 +1,72 @@
+---
+- name: Install all programs
+  hosts: all
+  become: yes
+
+ 
+  - name: Adding existing users to group
+    user:
+      name: '{{ item }}'
+      groups: docker
+      append: yes
+    with_items:
+      - jenkins
+
+
+
+  - name: Configure ufw rules
+    ufw: rule={{ item.rule }} port={{ item.port }} proto={{ item.protocol }}
+    with_items:
+      - { rule: 'allow', port: '8080', protocol: 'tcp' }
+      - { rule: 'allow', port: '80', protocol: 'tcp' }
+      - { rule: 'allow', port: '22', protocol: 'tcp' }
+
+  - name: Allow OpenSSH
+    ufw: rule=allow name=OpenSSH
+
+  - name: Enable ufw logging
+    ufw: logging=on
+
+  - name: Enable ufw
+    ufw: state=enabled policy=allow
+
+
+
+
+  - name: Restart Docker
+    service: name=docker state=restarted
+  
+  
+  
+
+  - name: Install software-properties-common
+    apt: pkg=software-properties-common state=latest
+
+  - name: Add ansible stable repository from PPA and install its signing key on Ubuntu target
+    apt_repository:
+      repo: ppa:ansible/ansible
+  
+  - name: Install Ansible
+    apt: pkg=ansible state=latest
+  
+  - name: Install Sshpass
+    apt: pkg=sshpass state=latest
+
+  - name: Set up Ansible host key checking 
+    lineinfile:
+      dest: /etc/ansible/ansible.cfg
+      regexp: '#host_key_checking = False'
+      line: 'host_key_checking = False'
+  
+  - name: Set up Ansible interpreter
+    lineinfile:
+      dest: /etc/ansible/ansible.cfg
+      regexp: '# some basic default values...'
+      line: 'interpreter_python = /usr/bin/python3'
+
+
+
+
+  - name: Reboot
+    reboot:
+      reboot_timeout: 3600
